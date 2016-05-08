@@ -9,7 +9,6 @@ export default React.createClass({
 	},
 
 	acceptCall() {
-w
 	},
 
 	refuseCall() {
@@ -18,32 +17,20 @@ w
 
 	render() {
 		return (
+			<div>
 			{(() => {
 				if(this.state.mynumber === false) {
+					return (
 					<div className="setNumberPart">
 						<div className="grid-container grid-parent">
-							<div className="grid-100 box">
+							<div className="grid-100">
+								Please set your number by clicking here.
 							</div>
 						</div>
 					</div>
+					)
 				}
 			})()}
-			<div>
-				{(() => {
-					if(this.state.incoming !== false) {
-						return (
-							<div className="incomingPart">
-			          <div className="grid-container grid-parent">
-			            <div className="grid-100 box">
-			              <span>{this.state.incoming} calling you</span>
-										<button className="accept" onClick={this.acceptCall}><i className="fa fa-phone" aria-hidden="true"></i>&nbsp;Accept</button>
-			            	<button className="refuse" onClick={this.refuseCall}><i className="fa fa-remove" aria-hidden="true"></i>&nbsp;Refuse</button>
-										</div>
-			          </div>
-			  			</div>
-						)
-					}
-				})()}
 			</div>
 		)
 	}
