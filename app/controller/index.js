@@ -1,25 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Store from 'store';
 
-import Monitor from 'partial/monitor';
-import Dial from 'partial/dial';
-import Incoming from 'partial/incoming';
-import Number from 'partial/number';
+import CallInput from 'partial/callinput';
+import IncomingCall from 'partial/caller';
+import OnCall from 'partial/oncall';
+
+import SocketConnection from 'functional/socket';
 
 export default React.createClass({
+	componentDidMount() {
+		this.socketConnection = new SocketConnection();
+	},
 	render: function(){
 		return (
-			<main className="grid-container grid-parent">
-        <div className="grid-33 push-33">
-				<Number />
-				<Incoming />
-          <Monitor />
-          <Dial />
+			<main className="grid-container grid-parent mainPage">
+        <div className="grid-100">
+					<OnCall />
+					<IncomingCall />
+					<CallInput />
         </div>
 			</main>
 		)
 	}
 });
+
+
 /*
 
 <div className="grid-66 pull-33 video-connection">

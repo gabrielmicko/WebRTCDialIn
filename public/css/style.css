@@ -24,6 +24,7 @@ a {
 	text-decoration: none;
 	color: #fff;
 }
+
 h1 {
 	font-size: 20px;
 }
@@ -79,7 +80,6 @@ header span {
 	text-shadow: 0px 0px 2px rgba(0, 0, 0, 1);
 }
 
-
 .hide {
 	display: none;
 }
@@ -89,105 +89,181 @@ header span {
 }
 
 header {
-padding: 20px;
+	padding: 20px;
 }
 
 header img {
 	width: 50px;
 }
 
-.small-grid-container  {
-	max-width: 320px;
+.box {
+	background-color: rgba(0, 0, 0, 0.6);
+	margin: 10px 0;
 }
 
-.dialPart button {
-	background-color: #383838;
+input {
+	background-color: transparent;
+	border: 0;
+	outline: 0;
+	border-radius: 3px;
+	background-color: #095AA7;
 	color: #fff;
-	width: 100%;
-	padding: 20px;
-	text-align: center;
-	border: 0;
-	font-size: 25px;
 	box-sizing: border-box;
+	line-height: 1;
+	vertical-align: middle;
+	display: inline-block;
 }
 
-.dialPart .cam.off i {
-	opacity: 0.3;
-}
-
-.dialPart button:hover {
-	background-color: rgb(80, 80, 80);
-}
-
-.dialPart button.green {
-	background-color: #8DBD35;
-}
-
-.dialPart button.green:hover {
-	background-color: #9FD836;
-}
-
-.dialPart button.red {
-	background-color: rgb(158, 1, 1);
-}
-
-.dialPart button.red:hover {
-	background-color: rgb(198, 4, 4)
-}
-.dialPart .cam button,
-.dialPart .mic button,
-.dialPart .hang-up button,
-.dialPart .dial button {
-	font-size: 20px;
-}
-
-.monitorPart {
-	padding: 20px;
-	box-sizing: border-box;
-}
-
-.monitorPart .running {
-	color: #92C438;
-	font-size: 20px;
-}
-
-.monitorPart .caller {
-	font-size: 35px;
-}
-
-.monitorPart input {
-	background-color: #000;
-	color: #fff;
-	border: 0;
-	width: 100%;
-	border-bottom: 1px solid #fff;
-}
-
-.monitorPart .dialfield {
-	font-size: 20px;
-}
-
-.monitorPart .dialfield .fa-remove {
-	cursor:pointer;
-}
-
-.incomingPart button {
-	height: 30px;
-	min-width: 100px;
-	border: 0;
-	margin: 0 10px;
-}
-
-.incomingPart .box {
-	border: 1px dashed #92C438;
+.box {
 	padding: 10px;
 }
-.incomingPart .accept {
-	background-color: #9FD836;
-	color: #fff;
+.callInput {
+	padding: 20px;
+}
+.callInput input {
+	min-width: 300px;
+	padding: 5px 10px;
+	height: 40px;
 }
 
-.incomingPart .refuse {
-	background-color: rgb(198, 4, 4);
+.callInput label {
+	vertical-align: middle;
+	display: block;
+	margin-bottom: 20px;
+}
+.callInput label,
+h2 {
+	color: #AECEE3;
+	font-weight: 300;
+	text-shadow: rgb(79, 112, 131) 0px 2px 3px;
+}
+.callInput input,
+.callInput label {
+	font-size: 20px;
+}
+
+.callInput button .fa-phone.call {
+	animation: squeeze 0.5s infinite;
+}
+
+@keyframes squeeze {
+    0%   {transform: rotate(0deg)}
+    50%  {transform: rotate(50deg)}
+    100%  {transform: rotate(0deg)}
+}
+
+button {
+	background-color: #fff;
+	border-radius: 3px;
+	border-width: 0;
+	color: #0D2950;
+	display: inline-block;
+	line-height: 1;
+	vertical-align: middle;
+	box-sizing: border-box;
+}
+
+.callInput button {
+	padding: 10px 20px;
+	height: 40px;
+}
+
+.navSettings button.save,
+.navSettings input {
+	height: 30px;
+}
+.navSettings {
+	text-align: right;
+
+}
+
+.navSettings button.save {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	margin-right: 10px;
+}
+
+.navSettings input {
+	padding: 5px 10px;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.navSettings button.cog {
+	background-color: #071A33;
 	color: #fff;
+	padding: 10px;
+	font-size: 20px;
+}
+
+.navSettings button.cog:hover {
+	background-color: #0D2950;
+}
+
+.navSettings.active button.cog {
+	background-color: #0D2950;
+}
+
+.mainPage {
+	margin-top: 100px;
+}
+
+.incomingCall {
+	padding: 20px;
+}
+
+.incomingCall h2 {
+	font-size: 20px;
+	margin-top: 0px;
+}
+
+.incomingCall p {
+	font-size: 16px;
+}
+
+.incomingCall button {
+	color: #fff;
+	padding: 5px 10px;
+	margin-right: 10px;
+}
+
+.incomingCall .acceptCallButton {
+	background-color: #66A14D;
+}
+
+.incomingCall .refuseCallButton {
+	background-color: #B43B10;
+}
+
+.onCall {
+	min-width: 600px;
+}
+
+.onCall .players {
+	position: relative;
+}
+
+.onCall {
+	min-width: 600px;
+}
+
+.onCall .mine {
+	width: 100%;
+}
+
+.onCall .yours {
+	position: absolute;
+	right: 30px;
+	bottom: 30px;
+	max-width: 150px;
+}
+
+.onCall .hangUp {
+	color: #fff;
+	padding: 5px 10px;
+	background-color: #B43B10;
+	float: right;
+}
+
+.onCall .information {
+	margin-top: 10px;
 }

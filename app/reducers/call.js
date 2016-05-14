@@ -1,20 +1,26 @@
 var dialInitialState = {
-    'camera': true,
-    'micrphone': true,
-    'incoming': true,
+    'number': false,
+    'acceptedFrom': false
 };
 
 export default function(state = dialInitialState, action) {
     switch(action.type) {
-        case 'CALLNUMBER_UPDATE':
+        case 'NUMBER_UPDATE':
             var newState = Object.assign({}, state)
-            newState.callNumber.push(action.number);
+            newState.number = action.number;
             return newState;
+        break;
         case 'CALLNUMBER_CLEAR':
-                var newState = Object.assign({}, state)
-                newState.callNumber = [];
-                return newState;
+            var newState = Object.assign({}, state)
+            newState.number = false;
+            return newState;
+        break;
+        case 'ACCEPTED_FROM':
+            var newState = Object.assign({}, state)
+            newState.acceptedFrom = action.acceptedFrom;
+            return newState;
+        break;
         default:
-            return state;
+        return state;
     }
 }

@@ -5,11 +5,15 @@ import thunk from 'redux-thunk';
 var createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
 
 // App Reducers
-import dialReducer from './reducers/dial';
+import socketReducer from './reducers/socket';
+import callReducer from './reducers/call';
+import webrtcReducer from './reducers/webrtc';
 
 // Combine Reducers
 var reducers = combineReducers({
-    'dialReducer': dialReducer
+    'socketReducer': socketReducer,
+    'callReducer': callReducer,
+    'webrtcReducer': webrtcReducer
     // more...
 });
 
