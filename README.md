@@ -3,5 +3,5 @@ npm install
 node server.js
 
 
-#Developer enviroment
+#Developer environment
 webpack -w
