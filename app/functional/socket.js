@@ -18,7 +18,7 @@ class SocketConnection {
     }
 
     setListeners() {
-        this.socket.on('connect', function() {
+        this.socket.on('connection', function() {
             Store.dispatch({
                 'type': 'SOCKET',
                 'status': 'connected'
