@@ -23,6 +23,7 @@ class SocketConnection {
                 'type': 'SOCKET',
                 'status': 'connected'
             });
+            console.log('Socket connected.');
         });
 
         this.socket.on('disconnect', function() {
@@ -30,6 +31,7 @@ class SocketConnection {
                 'type': 'SOCKET',
                 'status': 'disconnected'
             });
+            console.log('Socket disconnected.');
         });
 
         this.socket.on('message', function(message) {
@@ -46,6 +48,7 @@ class SocketConnection {
                 let messages = currentStore.socketReducer.outgoingMessages.slice(0);
                 let message = messages.pop();
                 this.sendMessage(message);
+                console.log('Socket send message.');
                 this.outgoingMessages = currentStore.socketReducer.outgoingMessages.slice(0);
             }
         }.bind(this));
