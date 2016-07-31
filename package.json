@@ -1,14 +1,17 @@
 {
   "name": "webrtcdialin",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "WebRTCDialIn",
   "main": "webpack.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack -w",
+    "build": "webpack"
   },
-  "author": "",
+  "author": "Gabriel Micko",
   "license": "ISC",
   "dependencies": {
+    "fs": "0.0.2",
+    "json-loader": "^0.5.4",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-router": "^2.0.0-rc5",

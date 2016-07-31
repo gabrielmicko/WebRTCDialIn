@@ -1,1 +1,4 @@
 node_modules
+app/config/config.json
+public/js/bundle.js
+public/bundle.js

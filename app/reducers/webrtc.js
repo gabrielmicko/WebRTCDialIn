@@ -10,31 +10,31 @@ var webrtcInitialState = {
 global.myPc = false;
 
 export default function(state = webrtcInitialState, action) {
-    switch(action.type) {
+    switch (action.type) {
         case 'SET_MY_VID':
             var newState = Object.assign({}, state)
             newState.myVideoBlob = action.video;
             return newState;
-        break;
+            break;
         case 'SET_YOUR_VID':
             var newState = Object.assign({}, state)
             newState.yourVideoBlob = action.video;
             return newState;
-        break;
+            break;
 
         case 'SHOW_ON_CALL':
             var newState = Object.assign({}, state)
             newState.showOnCall = action.showOnCall;
             return newState;
-        break;
+            break;
 
         case 'ADD_CANDIDATE':
             var newState = Object.assign({}, state)
             newState.candidates.push(action.candidate);
             return newState;
-        break;
+            break;
 
         default:
-        return state;
+            return state;
     }
 }

@@ -1,7 +1,39 @@
-#Running the server.
+# WebRTC Dial In
+Please note:
+
+This project is highly in development. Key feature is working, but a plenty of todos are waiting to be done.
+
+This application is meant to be a demo for WebRTC call features.
+Every user can obtain an identity. Once it is done you can call the other user.
+
+### What it does:
+* obtaining identity
+* call somebody
+* live p2p video call with someone
+
+### Configuration
+For the proper functionality you will need to run WebRTCDialInServer (signalling for WebRTC). You can find it inside my repositories.
+Set the address for the WebRTCDialInServer in the **app/config/config.json**.
+
+```js
+{
+  "dialInServer": "localhost:3050"
+}
+```
+
+### Running the application
+```sh
 npm install
-node server.js
+npm run build
+npm start
+```
 
+### Running for development
+```sh
+npm install
+npm run dev
+npm start
+```
 
-#Developer environment
-webpack -w
+### Version
+0.0.1

@@ -8,6 +8,6 @@ app.get('*', function(req, resp) {
 	resp.sendFile(__dirname + '/index.html');
 });
 
-app.listen(8001, function () {
-  console.log('Example app listening on port 8000!');
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
 });

@@ -3,6 +3,6 @@ import NoMatch from 'controller/nomatch';
 
 
 export {
-	IndexAction,
-	NoMatch
+    IndexAction,
+    NoMatch
 }
