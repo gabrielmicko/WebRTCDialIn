@@ -9,7 +9,7 @@ export default React.createClass({
 				<header>
 					<div className="grid-container grid-parent">
 						<div className="grid-50">
-							<img src="/public/img/webrtc.png" className="webrtc-logo" />
+							<img src="/img/webrtc.png" className="webrtc-logo" />
 							<span className="bold">Teach</span>
 							<span className="normal">WebRTC</span>
 						</div>
