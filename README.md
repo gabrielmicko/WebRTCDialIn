@@ -6,6 +6,12 @@ This project is highly in development. Key feature is working, but a plenty of t
 This application is meant to be a demo for WebRTC call features.
 Every user can obtain an identity. Once it is done you can call the other user.
 
+### Demo video
+
+Please check this demo video to get to know about this project.
+
+![alt tag](https://raw.githubusercontent.com/gabrielmicko/WebRTCDialIn/master/public/img/demovideo.png)
+
 ### What it does:
 * obtaining identity
 * call somebody
