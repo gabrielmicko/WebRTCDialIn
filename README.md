@@ -10,8 +10,7 @@ Every user can obtain an identity. Once it is done you can call the other user.
 
 Please check this demo video to get to know about this project.
 
-![alt tag](https://raw.githubusercontent.com/gabrielmicko/WebRTCDialIn/master/public/img/demovideo.png)
-
+[![Demo Video](https://raw.githubusercontent.com/gabrielmicko/WebRTCDialIn/master/public/img/demovideo.png)](https://www.youtube.com/watch?v=XIupxMnlGfU)
 ### What it does:
 * obtaining identity
 * call somebody
