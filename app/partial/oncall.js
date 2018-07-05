@@ -120,14 +120,14 @@ export default React.createClass({
                   <video
                     className="mine"
                     autoPlay
-                    controls
-                    muted={true}
+                    controls={true}
                     playsInline={true}
                   />
                   <video
                     className="yours"
-                    autoPlay
-                    controls
+                    autoPlay={true}
+                    controls={true}
+                    muted={true}
                     playsInline={true}
                   />
                 </div>
