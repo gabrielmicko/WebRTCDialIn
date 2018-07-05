@@ -269,9 +269,9 @@ button {
 
 .onCall .yours {
   position: absolute;
-  right: 30px;
-  bottom: 30px;
-  max-width: 150px;
+  right: 10px;
+  top: 10px;
+  max-width: 25%;
 }
 
 .onCall .hangUp {
@@ -283,4 +283,43 @@ button {
 
 .onCall .information {
   margin-top: 10px;
+}
+.onCall .hangUp,
+.onCall .duration {
+  display: none;
+}
+
+@media screen and (max-width: 568px) {
+  .mainPage {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .navSettings {
+    text-align: left;
+    margin-top: 15px;
+  }
+
+  .navSettings .cog {
+    display: none;
+  }
+  .onCall .yours {
+    right: 10px;
+    max-width: 25%;
+    top: 10px;
+  }
+
+  .callInput input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .callInput button {
+    width: 100%;
+    display: block;
+    margin-top: 0;
+  }
+  .onCall {
+    min-width: 0;
+  }
 }

@@ -50,11 +50,10 @@ export default React.createClass({
   updateVideo() {
     setTimeout(() => {
       if (this.state.myVideoBlob) {
-        document.querySelector(".mine").srcObject = this.state.myVideoBlob;
+        document.querySelector(".yours").srcObject = this.state.myVideoBlob;
       }
-      console.log("yourvid", this.state.yourVideoBlob);
       if (this.state.yourVideoBlob) {
-        document.querySelector(".yours").srcObject = this.state.yourVideoBlob;
+        document.querySelector(".mine").srcObject = this.state.yourVideoBlob;
       }
     }, 200);
   },
@@ -94,7 +93,6 @@ export default React.createClass({
         }
 
         if (currentStore.webrtcReducer.yourVideoBlob !== false) {
-          console.log("NEMFALSE");
           this.setState({
             yourVideoBlob: currentStore.webrtcReducer.yourVideoBlob
           });
@@ -119,13 +117,26 @@ export default React.createClass({
             return (
               <div className="grid-container grid-parent onCall box-b">
                 <div className="grid-100 grid-parent players">
-                  <video className="mine" autoPlay controls muted={true} />
-                  <video className="yours" autoPlay controls />
+                  <video
+                    className="mine"
+                    autoPlay
+                    controls
+                    muted={true}
+                    playsInline={true}
+                  />
+                  <video
+                    className="yours"
+                    autoPlay
+                    controls
+                    playsInline={true}
+                  />
                 </div>
                 <div className="grid-100 grid-parent information">
                   <div className="grid-50 ">
                     <div className="duration">00:00:00</div>
-                    <strong className="talkingWith">{this.state.number}</strong>
+                    <strong className="talkingWith">
+                      Talking with: {this.state.number}
+                    </strong>
                   </div>
                   <div className="grid-50">
                     <button className="hangUp">Hang up</button>
