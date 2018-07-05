@@ -1,87 +1,103 @@
-import React from 'react';
-import Store from 'store';
-import WebRTC from 'functional/webrtc';
+import React from "react";
+import Store from "store";
+import Caller from "functional/caller";
 
 export default React.createClass({
+  getInitialState() {
+    return {
+      display: false,
+      incomingMessages: [],
+      number: "" //who is calling
+    };
+  },
 
-	getInitialState() {
-		return {
-			'display': false,
-			'incomingMessages': [],
-			'number': ''//who is calling
-		}
-	},
+  componentDidMount() {
+    Store.subscribe(
+      function() {
+        let currentStore = Store.getState();
 
-	componentDidMount() {
-			Store.subscribe(function() {
-				let currentStore = Store.getState();
+        if (
+          currentStore.socketReducer.incomingMessages.length >
+          this.state.incomingMessages.length
+        ) {
+          let messages = currentStore.socketReducer.incomingMessages.slice(0);
+          let message = messages.pop();
+          this.setState({
+            incomingMessages: currentStore.socketReducer.incomingMessages.slice(
+              0
+            )
+          });
+          if ("type" in message && message.type === "incoming_call") {
+            this.setState({
+              display: true,
+              number: message.number
+            });
+          }
+        }
+      }.bind(this)
+    );
+  },
 
-					if(currentStore.socketReducer.incomingMessages.length > this.state.incomingMessages.length) {
+  acceptCall() {
+    if (this.state.number.length > 0) {
+      Store.dispatch({
+        type: "SOCKET_OUT_MSG",
+        message: {
+          type: "incoming_call_accepted",
+          number: this.state.number
+        }
+      });
 
-						let messages = currentStore.socketReducer.incomingMessages.slice(0);
-						let message = messages.pop();
-						this.setState({
-							'incomingMessages': currentStore.socketReducer.incomingMessages.slice(0)
-						});
-						if('type' in message && message.type === 'incoming_call') {
-								this.setState({
-									'display': true,
-									'number': message.number
-								})
-						}
-					}
+      Store.dispatch({
+        type: "ACCEPTED_FROM",
+        acceptedFrom: this.state.number
+      });
 
-			}.bind(this));
-	},
+      this.setState({
+        display: false
+      });
 
-	acceptCall() {
-			if(this.state.number.length > 0) {
-				Store.dispatch({
-					'type': 'SOCKET_OUT_MSG',
-					'message': {
-						'type': 'incoming_call_accepted',
-						'number': this.state.number
-					}
-				});
-				
-				Store.dispatch({
-					'type': 'ACCEPTED_FROM',
-					'acceptedFrom': this.state.number
-				});
+      let webRTC = new Caller();
+      webRTC.init();
+    }
+  },
 
-				this.setState({
-					'display': false
-				});
-
-				let webRTC = new WebRTC();
-				webRTC.init();
-			}
-	},
-
-	refuseCall() {
-		this.setState({
-			'display': false,
-			'number': ''
-		});
-	},
-	render() {
-		return (
-			<div>
-			{(() => {
-				if(this.state.display === true) {
-					return (
-						<div className="grid-container grid-parent incomingCall box">
-							<div className="grid-100">
-								<h2>Incoming call!</h2>
-                <p><strong>{this.state.number}</strong> is calling you.</p>
-                <button className="acceptCallButton" onClick={this.acceptCall}><i className="fa fa-phone" ></i>&nbsp;&nbsp;&nbsp;Accept</button>
-                <button className="refuseCallButton" onClick={this.refuseCall}><i className="fa fa-remove" ></i>&nbsp;&nbsp;&nbsp;Refuse</button>
-							</div>
-						</div>
-					)
-				}
-			})()}
-			</div>
-		)
-	}
+  refuseCall() {
+    this.setState({
+      display: false,
+      number: ""
+    });
+  },
+  render() {
+    return (
+      <div>
+        {(() => {
+          if (this.state.display === true) {
+            return (
+              <div className="grid-container grid-parent incomingCall box-b">
+                <div className="grid-100">
+                  <h2>Incoming call!</h2>
+                  <p>
+                    <strong>{this.state.number}</strong> is calling you.
+                  </p>
+                  <button
+                    className="acceptCallButton"
+                    onClick={this.acceptCall}
+                  >
+                    <i className="fa fa-phone" />&nbsp;&nbsp;&nbsp;Accept
+                  </button>
+                  <button
+                    className="refuseCallButton"
+                    onClick={this.refuseCall}
+                  >
+                    <i className="fa fa-remove" />&nbsp;&nbsp;&nbsp;Refuse
+                  </button>
+                </div>
+              </div>
+            );
+          }
+        })()}
+      </div>
+    );
+  }
 });

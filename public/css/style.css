@@ -1,269 +1,286 @@
 body {
-	background-image: url('/img/earth.jpg');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-attachment: fixed;
-	position: relative;
-	background-size: cover;
-	font-family: 'Raleway Webfont', sans-serif;
-	color: #fff;
+  background-image: url("/img/earth.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  position: relative;
+  background-size: cover;
+  font-family: "Raleway Webfont", sans-serif;
+  color: #fff;
 }
 
 .contain {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	min-height: 100vh;
-  	flex-direction: column;
-	background-image: -moz-linear-gradient(left, rgba(0,0,0,0.8) 0%, rgba(30,87,153,0) 50%, rgba(0,0,0,0.8) 100%);
-	background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.8) 0%,rgba(30,87,153,0) 50%,rgba(0,0,0,0.8) 100%);
-	background-image: linear-gradient(to right, rgba(0,0,0,0.8) 0%,rgba(30,87,153,0) 50%,rgba(0,0,0,0.8) 100%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background-image: -moz-linear-gradient(
+    left,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(30, 87, 153, 0) 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  background-image: -webkit-linear-gradient(
+    left,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(30, 87, 153, 0) 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(30, 87, 153, 0) 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
 }
 
 a {
-	text-decoration: none;
-	color: #fff;
+  text-decoration: none;
+  color: #fff;
 }
 
 h1 {
-	font-size: 20px;
+  font-size: 20px;
 }
 
 h2 {
-	font-size: 18px;
+  font-size: 18px;
 }
 
 h3 {
-	font-size: 16px;
+  font-size: 16px;
 }
 
 p {
-	font-size: 14px;
+  font-size: 14px;
 }
 
 .normal {
-	font-weight: 300;
+  font-weight: 300;
 }
 
 .bold {
-	font-weight: 600;
+  font-weight: 600;
 }
 
 .bluebg {
-	background-color: #095AA7;
+  background-color: #095aa7;
 }
 
 .bluebg-hover:hover {
-	background-color: #0B6AC5;
+  background-color: #0b6ac5;
 }
 
 .webrtc-logo {
-	width: 40px;
-	vertical-align: middle;
-	padding-right: 20px;
-	line-height: 40px;
+  width: 40px;
+  vertical-align: middle;
+  padding-right: 20px;
+  line-height: 40px;
 }
 
 header {
-	background-color: rgba(0, 0, 0, 0.6);
-	padding: 20px;
-	color: #6DC8E7;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  color: #6dc8e7;
 }
 
-
 header span {
-	vertical-align: middle;
-	line-height: 40px;
-	display: inline-block;
-	margin-top: 7px;
-	font-size: 18px;
-	text-shadow: 0px 0px 2px rgba(0, 0, 0, 1);
+  vertical-align: middle;
+  line-height: 40px;
+  display: inline-block;
+  margin-top: 7px;
+  font-size: 18px;
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 1);
 }
 
 .hide {
-	display: none;
+  display: none;
 }
 
 .hidden {
-	visibility: hidden;
+  visibility: hidden;
 }
 
 header {
-	padding: 20px;
+  padding: 20px;
 }
 
 header img {
-	width: 50px;
+  width: 50px;
 }
 
-.box {
-	background-color: rgba(0, 0, 0, 0.6);
-	margin: 10px 0;
+.box-b {
+  background-color: rgba(0, 0, 0, 0.6);
+  margin: 10px 0;
+  padding: 10px;
 }
 
 input {
-	background-color: transparent;
-	border: 0;
-	outline: 0;
-	border-radius: 3px;
-	background-color: #095AA7;
-	color: #fff;
-	box-sizing: border-box;
-	line-height: 1;
-	vertical-align: middle;
-	display: inline-block;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  border-radius: 3px;
+  background-color: #095aa7;
+  color: #fff;
+  box-sizing: border-box;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-block;
 }
 
-.box {
-	padding: 10px;
-}
 .callInput {
-	padding: 20px;
+  padding: 20px;
 }
 .callInput input {
-	min-width: 300px;
-	padding: 5px 10px;
-	height: 40px;
+  min-width: 300px;
+  padding: 5px 10px;
+  height: 40px;
 }
 
 .callInput label {
-	vertical-align: middle;
-	display: block;
-	margin-bottom: 20px;
+  vertical-align: middle;
+  display: block;
+  margin-bottom: 20px;
 }
 .callInput label,
 h2 {
-	color: #AECEE3;
-	font-weight: 300;
-	text-shadow: rgb(79, 112, 131) 0px 2px 3px;
+  color: #aecee3;
+  font-weight: 300;
+  text-shadow: rgb(79, 112, 131) 0px 2px 3px;
 }
 .callInput input,
 .callInput label {
-	font-size: 20px;
+  font-size: 20px;
 }
 
 .callInput button .fa-phone.call {
-	animation: squeeze 0.5s infinite;
+  animation: squeeze 0.5s infinite;
 }
 
 @keyframes squeeze {
-    0%   {transform: rotate(0deg)}
-    50%  {transform: rotate(50deg)}
-    100%  {transform: rotate(0deg)}
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(50deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 button {
-	background-color: #fff;
-	border-radius: 3px;
-	border-width: 0;
-	color: #0D2950;
-	display: inline-block;
-	line-height: 1;
-	vertical-align: middle;
-	box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 3px;
+  border-width: 0;
+  color: #0d2950;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+  box-sizing: border-box;
 }
 
 .callInput button {
-	padding: 10px 20px;
-	height: 40px;
+  padding: 10px 20px;
+  height: 40px;
 }
 
 .navSettings button.save,
 .navSettings input {
-	height: 30px;
+  height: 30px;
 }
 .navSettings {
-	text-align: right;
-
+  text-align: right;
 }
 
 .navSettings button.save {
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
-	margin-right: 10px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-right: 10px;
 }
 
 .navSettings input {
-	padding: 5px 10px;
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
+  padding: 5px 10px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .navSettings button.cog {
-	background-color: #071A33;
-	color: #fff;
-	padding: 10px;
-	font-size: 20px;
+  background-color: #071a33;
+  color: #fff;
+  padding: 10px;
+  font-size: 20px;
 }
 
 .navSettings button.cog:hover {
-	background-color: #0D2950;
+  background-color: #0d2950;
 }
 
 .navSettings.active button.cog {
-	background-color: #0D2950;
+  background-color: #0d2950;
 }
 
 .mainPage {
-	margin-top: 100px;
+  margin-top: 100px;
 }
 
 .incomingCall {
-	padding: 20px;
+  padding: 20px;
 }
 
 .incomingCall h2 {
-	font-size: 20px;
-	margin-top: 0px;
+  font-size: 20px;
+  margin-top: 0px;
 }
 
 .incomingCall p {
-	font-size: 16px;
+  font-size: 16px;
 }
 
 .incomingCall button {
-	color: #fff;
-	padding: 5px 10px;
-	margin-right: 10px;
+  color: #fff;
+  padding: 5px 10px;
+  margin-right: 10px;
 }
 
 .incomingCall .acceptCallButton {
-	background-color: #66A14D;
+  background-color: #66a14d;
 }
 
 .incomingCall .refuseCallButton {
-	background-color: #B43B10;
+  background-color: #b43b10;
 }
 
 .onCall {
-	min-width: 600px;
+  min-width: 600px;
 }
 
 .onCall .players {
-	position: relative;
+  position: relative;
 }
 
 .onCall {
-	min-width: 600px;
+  min-width: 600px;
 }
 
 .onCall .mine {
-	width: 100%;
+  width: 100%;
 }
 
 .onCall .yours {
-	position: absolute;
-	right: 30px;
-	bottom: 30px;
-	max-width: 150px;
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  max-width: 150px;
 }
 
 .onCall .hangUp {
-	color: #fff;
-	padding: 5px 10px;
-	background-color: #B43B10;
-	float: right;
+  color: #fff;
+  padding: 5px 10px;
+  background-color: #b43b10;
+  float: right;
 }
 
 .onCall .information {
-	margin-top: 10px;
+  margin-top: 10px;
 }

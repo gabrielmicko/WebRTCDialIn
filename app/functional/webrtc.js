@@ -1,291 +1,258 @@
-import Store from 'store';
+import EventEmitter from "events";
+const WebRTCEvents = {
+  ONICECANDIDATE: "onicecandidate",
+  ONTRACK: "ontrack",
+  ONNEGOTIATIONNEEDED: "onnegotiationneeded",
+  SIGNALINGSTATECHANGE: "signalingstatechange"
+};
 
+const WebRTCPublicEvents = {
+  ONICECANDIDATE: "candidate",
+  ONSTREAM: "stream",
+  OFFER: "offer"
+};
 
-class WebRTC {
+import WebRTCAnalyzer from "webrtc-analyzer";
+import Debug from "./debug";
 
-    constructor() {
-        this.incomingMessages = [];
-        this.master = false;
-    }
+export default class WebRTC extends EventEmitter {
+  //options.type view | publish
+  //options.rtcConfig.iceServers
+  //options.rtcConfig.iceTransportPolicy
+  //options.rtcConfig.bundlePolicy
+  //options.rtcConfig.rtcpMuxPolicy
+  //options.rtcConfig.peerIdentity
+  //options.rtcConfig.certificates
+  //options.rtcConfig.iceCandidatePoolSize
+  //options.offer.iceRestart
 
-    init(master = false) {
-        this.master = master;
-        let currentStore = Store.getState();
-        this.getUserMedia({
-            'audio': currentStore.webrtcReducer.mic,
-            'video': currentStore.webrtcReducer.cam,
-        }).then(function(mediaStream) {
-            let streamObj = window.URL.createObjectURL(mediaStream);
+  constructor(options = {}) {
+    super();
+    this.options = options;
+    this.options.type = this.options.type || "view";
+    this.mediaStream = new MediaStream();
+    this.pendingCandidatesQueue = [];
+    this.debug = new Debug("WebRTC", this.options.debugTag);
+    this._start();
+  }
 
-            Store.dispatch({
-                'type': 'SET_MY_VID',
-                'video': streamObj
-            });
-            Store.dispatch({
-                'type': 'SHOW_ON_CALL',
-                'showOnCall': true
-            });
+  _start() {
+    let pcConfig = this._getPCConfiguration();
+    this.pc = new RTCPeerConnection(pcConfig);
+    this.debug.log("RTCPeerConnection created, configuration:", pcConfig);
+    this._setListeners();
+  }
 
-            this.createPC(mediaStream);
-        }.bind(this));
-    }
-
-    getUserMedia(params) {
-        if (navigator.mediaDevices.getUserMedia) {
-            return navigator.mediaDevices.getUserMedia(params);
-        } else {
-            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-            return new Promise(function(resolve, reject) {
-                navigator.getUserMedia(params, resolve, reject);
-            });
-        }
-    }
-
-    createPC(mediaStream) {
-        console.log('Create peerconn.');
-        myPc = new(this.getPC())({
-            'iceServers': this.getIce(),
-            'mandatory': this.getConstrains()
-        });
-
-        myPc.onaddstream = function(event) {
-            console.log('Incoming stream.');
-            if (!event.stream) {
-                return;
-            }
-            let streamObj = window.URL.createObjectURL(event.stream);
-
-            Store.dispatch({
-                'type': 'SET_YOUR_VID',
-                'video': streamObj
-            });
-        };
-
-        myPc.addStream(mediaStream);
-
-        myPc.onicecandidate = function(event) {
-            if (!event || !event.candidate) return;
-            let currentStore = Store.getState();
-            Store.dispatch({
-                'type': 'SOCKET_OUT_MSG',
-                'message': {
-                    'type': 'candidate',
-                    'number': currentStore.callReducer.acceptedFrom,
-                    'message': event.candidate
-                }
-            });
-        };
-        this.setCommunicationRelay();
-        if (this.master === true) {
-            this.createOffer();
-        }
-
-    }
-
-    createOffer() {
-        try {
-
-            let currentStore = Store.getState();
-            console.log(this);
-            myPc.createOffer(
-                function(offer) {
-                    console.log('Create offer.');
-                    myPc.setLocalDescription(
-                        offer,
-                        function() {
-                            console.log('Set local description succeed.');
-                            let currentStore = Store.getState();
-                            Store.dispatch({
-                                'type': 'SOCKET_OUT_MSG',
-                                'message': {
-                                    'type': 'offer',
-                                    'number': currentStore.callReducer.acceptedFrom,
-                                    'message': offer
-                                }
-                            });
-                        },
-                        function() {
-                            console.log('Set local description failed.');
-                        }
-                    );
-
-
-                }.bind(this),
-                function() {
-                    console.log('Creating offer failed.');
-                }, {
-                    'mandatory': this.getConstrains()
-                }
-            );
-        } catch (e) {
-            console.log(e);
-        }
-
-    }
-
-    createAnswer(offer) {
-        console.log('Create answer');
-        myPc.setRemoteDescription(
-            new(this.getSessionDescription())(offer),
-            function() {
-                console.log('Remote SDP attached.');
+  _createOffer(constraints) {
+    return new Promise((resolve, reject) => {
+      this.debug.log(
+        "About the create an offer with the following constrains:",
+        constraints
+      );
+      this.pc.createOffer(constraints).then(
+        offer => {
+          this.debug.log("Offer created:", offer);
+          this.pc.setLocalDescription(offer).then(
+            () => {
+              this.debug.log("Offer set as local description.");
+              resolve(this.pc.localDescription.sdp);
             },
-            function() {
-                console.log('Falied to attach remote SDP.');
+            () => {
+              this.debug.error("Failed to set offer as local description.");
+              reject();
             }
-        )
-
-        myPc.createAnswer(
-            function(answer) {
-                myPc.setLocalDescription(
-                    answer,
-                    function() {
-                        console.log('Answer as my SDP.')
-                        this.applyCandidates();
-                    }.bind(this),
-                    function() {
-                        console.log('Failed to attach remote sdp.');
-                    });
-                console.log('Answer created.');
-
-                let currentStore = Store.getState();
-
-                console.log('Sending answer')
-                Store.dispatch({
-                    'type': 'SOCKET_OUT_MSG',
-                    'message': {
-                        'type': 'answer',
-                        'number': currentStore.callReducer.acceptedFrom,
-                        'message': answer
-                    }
-                });
-
-            }.bind(this),
-            function() {
-                console.log('Creating answer failed.');
-            }, {
-                'mandatory': this.getConstrains()
-            }
-        );
-    }
-    storeCandidate(candidate) {
-        Store.dispatch({
-            'type': 'ADD_CANDIDATE',
-            'candidate': candidate
-        });
-    }
-    applyCandidates() {
-        console.log('Applying candidates');
-        let currentStore = Store.getState();
-        console.log('LEN', currentStore.webrtcReducer.candidates.length);
-        if (currentStore.webrtcReducer.candidates.length < 2) {
-            setTimeout(this.applyCandidates.bind(this), 1000);
-            return false;
+          );
+        },
+        () => {
+          this.debug.error("Failed to create offer.");
+          reject();
         }
-        currentStore.webrtcReducer.candidates.forEach(function(candidate) {
-            let iceCandidate = new(this.getCandidate())(candidate);
-            console.log('CC');
-            console.log(candidate);
-            myPc.addIceCandidate(iceCandidate, function() {
-                    console.log('Candidate added.');
-                },
-                function(e) {
-                    console.log(iceCandidate);
-                    console.log(e);
-                    console.log('Failed to add candidate');
-                });
-        }.bind(this));
-    }
+      );
+    });
+  }
 
-    applyAnswer(answer) {
-        console.log('Answer receiver', answer);
-        let sdpObj = this.getSessionDescription();
-        let sdpAnsw = new sdpObj(answer);
-        console.log(sdpAnsw);
-        myPc.setRemoteDescription(
-            sdpAnsw,
-            function(answer) {
-                console.log('Remote SDP Answer attached.');
-                this.applyCandidates();
-            }.bind(this),
-            function(e) {
-                console.log(e);
-                console.log('FAILED: Remote SDP Answer attached.');
+  _createAnswer() {
+    return new Promise((resolve, reject) => {
+      this.pc.createAnswer().then(
+        answer => {
+          this.debug.log("Answer created:", answer);
+          this.pc.setLocalDescription(answer).then(
+            () => {
+              this.debug.log("Answer set as local description.");
+              resolve(this.pc.localDescription.sdp);
             },
-        );
-
-
-    }
-
-
-    setCommunicationRelay() {
-        Store.subscribe(function() {
-            let currentStore = Store.getState();
-            if (currentStore.socketReducer.incomingMessages.length > this.incomingMessages.length) {
-                let messages = currentStore.socketReducer.incomingMessages.slice(0);
-                let message = messages.pop();
-                this.incomingMessages = currentStore.socketReducer.incomingMessages.slice(0);
-
-                switch (message.type) {
-                    case 'offer':
-                        this.createAnswer(message.message);
-                        break;
-
-                    case 'answer':
-                        this.applyAnswer(message.message);
-                        break;
-
-                    case 'candidate':
-                        console.log('INCOMING cand');
-                        this.storeCandidate(message.message);
-                        break;
-                }
+            () => {
+              this.debug.error("Failed to set answer as local description.");
+              reject();
             }
-
-        }.bind(this));
-    }
-
-
-    getIce() {
-        return [{
-            urls: "stun:23.21.150.121"
-        }, {
-            urls: "stun:stun.l.google.com:19302"
-        }];
-    }
-
-    getPC() {
-        let RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection || window.msRTCPeerConnection;
-        return RTCPeerConnection;
-    }
-
-    getCandidate() {
-        let RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.RTCIceCandidate;
-        return RTCIceCandidate;
-    }
-
-    getSessionDescription() {
-        let RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription || window.msRTCSessionDescription;
-        return RTCSessionDescription;
-    }
-
-    getConstrains() {
-        var isFirefox = typeof InstallTrigger !== 'undefined';
-        if (isFirefox) {
-            return {
-                'offerToReceiveAudio': true,
-                'offerToReceiveVideo': true
-            };
+          );
+        },
+        () => {
+          this.debug.error("Failed to create answer.");
+          reject();
         }
-        return {
-            'OfferToReceiveAudio': true,
-            'OfferToReceiveVideo': true
-        };
+      );
+    });
+  }
+
+  createOffer() {
+    return this._createOffer(this._getOfferConfiguration());
+  }
+
+  createAnswer() {
+    return this._createAnswer();
+  }
+
+  processOffer(offer) {
+    return new Promise((resolve, reject) => {
+      let rtcOffer = new RTCSessionDescription({
+        type: "offer",
+        sdp: offer
+      });
+
+      this.pc.setRemoteDescription(rtcOffer).then(
+        () => {
+          this.debug.log("Offer set as remote description.", rtcOffer);
+          resolve();
+        },
+        () => {
+          this.debug.error(
+            "Failed to set offer as remote description.",
+            rtcOffer
+          );
+          reject();
+        }
+      );
+    });
+  }
+
+  processAnswer(answer) {
+    return new Promise((resolve, reject) => {
+      let rtcAnswer = new RTCSessionDescription({
+        type: "answer",
+        sdp: answer
+      });
+
+      this.pc.setRemoteDescription(rtcAnswer).then(
+        () => {
+          this.debug.log("Answer set as remote description.", rtcAnswer);
+          resolve();
+        },
+        error => {
+          this.debug.error(
+            "Failed to set answer as remote description.",
+            error
+          );
+          reject();
+        }
+      );
+    });
+  }
+
+  addIceCandidate(candidate) {
+    return new Promise((resolve, reject) => {
+      let rtcCandidate = new RTCIceCandidate(candidate);
+      this._addIceCandidate(rtcCandidate).then(resolve, reject);
+    });
+  }
+
+  _addIceCandidate(rtcCandidate) {
+    return new Promise((resolve, reject) => {
+      this.pc.addIceCandidate(rtcCandidate).then(
+        () => {
+          this.debug.log("ICE candidate added.", rtcCandidate);
+          resolve();
+        },
+        error => {
+          this.debug.error("ICE candidate could not be added.", rtcCandidate);
+          reject();
+        }
+      );
+    });
+    r;
+  }
+
+  addStream(stream) {
+    stream.getTracks().forEach(track => {
+      this.pc.addTrack(track, stream);
+      this.debug.log("Track added to the peer connection.", track);
+    });
+  }
+
+  _getPCConfiguration() {
+    return this.options.rtcConfig || undefined;
+  }
+
+  _getOfferConfiguration() {
+    let viewOfferOptions = {
+      offerToReceiveAudio: true,
+      offerToReceiveVideo: true
+    };
+
+    let publishOfferOptions = {
+      offerToReceiveAudio: false,
+      offerToReceiveVideo: false
+    };
+
+    if (this.options.type === "view") {
+      return viewOfferOptions;
+    } else {
+      return publishOfferOptions;
     }
+  }
 
-    setListeners() {}
+  destroy() {
+    if (this.pc) {
+      this.pc.close();
+      this.debug.log("Destroying WebRTC, PeerConnection closed.");
+    }
+    if (this.debug.isDebug()) {
+      this.webRTCAnalyzer.destroy();
+    }
+  }
 
+  _isMediaStreamReady() {
+    let isAudio = false;
+    let isVideo = false;
+    this.mediaStream.getTracks().forEach(track => {
+      if (track.kind === "audio") {
+        isAudio = true;
+      }
+      if (track.kind === "video") {
+        isVideo = true;
+      }
+    });
 
+    if (isAudio && isVideo) {
+      return true;
+    }
+    return false;
+  }
+
+  _setListeners() {
+    this.pc[WebRTCEvents.ONICECANDIDATE] = evt => {
+      if (evt.candidate) {
+        this.debug.log("ICE candidate generated.", evt.candidate);
+        this.emit(WebRTCPublicEvents.ONICECANDIDATE, evt.candidate);
+      } else {
+        this.debug.log("Empty ICE candidate generated.", evt);
+      }
+    };
+
+    this.pc[WebRTCEvents.ONTRACK] = evt => {
+      this.mediaStream.addTrack(evt.track);
+      this.debug.log("Track added to the media stream.");
+      if (this._isMediaStreamReady()) {
+        this.debug.log("Stream is ready.");
+        this.emit(WebRTCPublicEvents.ONSTREAM, this.mediaStream);
+      }
+    };
+
+    if (this.debug.isDebug()) {
+      this.webRTCAnalyzer = new WebRTCAnalyzer({
+        peerConnection: this.pc,
+        interval: 3000
+      });
+    }
+  }
 }
-
-export default WebRTC;
